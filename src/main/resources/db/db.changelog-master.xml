@@ -1,0 +1,7 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+    <include context="default" file="0.0.1/changelog.xml" relativeToChangelogFile="true"/>
+    <include context="default" file="0.1.0/changelog.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

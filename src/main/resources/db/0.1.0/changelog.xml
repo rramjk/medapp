@@ -1,0 +1,66 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <changeSet context="default" author="Damir Seferberkov" id="create-table-roles">
+        <comment>Создание таблицы ma_roles_db</comment>
+        <sql>
+            <![CDATA[
+            CREATE TABLE ma_roles_db
+            (
+                id                UUID     NOT NULL PRIMARY KEY,
+                name              TEXT     NOT NULL UNIQUE,
+                description       TEXT     NOT NULL,
+                created_by        TEXT     NOT NULL,
+                created_date     TIMESTAMP NOT NULL,
+                modified_by       TEXT     NOT NULL,
+                modified_date TIMESTAMP  NOT NULL
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE IF EXISTS ma_roles_db;
+        </rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferberkov" id="create-table-users">
+        <comment>Создание таблицы ma_users_db</comment>
+        <sql>
+            <![CDATA[
+            CREATE TABLE ma_users_db
+            (
+                id                UUID      NOT NULL PRIMARY KEY,
+                first_name        TEXT      NOT NULL,
+                last_name         TEXT      NOT NULL,
+                birth_date        DATE      NOT NULL,
+                gender            TEXT      NOT NULL,
+                role_id           UUID      NOT NULL REFERENCES ma_roles_db (id),
+                email             TEXT      NOT NULL UNIQUE,
+                password_hash     TEXT      NOT NULL,
+                created_by        TEXT      NOT NULL,
+                created_date     TIMESTAMP NOT NULL,
+                modified_by       TEXT      NOT NULL,
+                modified_date TIMESTAMP NOT NULL
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE IF EXISTS ma_users_db;</rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferberkov" id="add-entity-in-role-table">
+        <comment>Добавление сущностей в таблицу ma_roles_db</comment>
+        <sql>
+            <![CDATA[
+            INSERT INTO ma_roles_db VALUES (uuid_generated_v4(), 'ADMIN', 'Роль администратора', 'system', now(), 'system', now());
+            INSERT INTO ma_roles_db VALUES (uuid_generated_v4(), 'USER', 'Роль пользователя', 'system', now(), 'system', now());
+            ]]>
+        </sql>
+        <rollback>
+            DELETE FROM ma_roles_db WHERE name = 'ADMIN';
+            DELETE FROM ma_roles_db WHERE name = 'USER';
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

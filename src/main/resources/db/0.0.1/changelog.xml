@@ -1,0 +1,56 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+    <changeSet context="default" author="Damir Seferberkov" id="MED-7-init-extentions">
+        <comment>Подключение необходимых расширений</comment>
+        <sql>
+            <![CDATA[ CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA public; ]]>
+        </sql>
+    </changeSet>
+    <changeSet id="init" author="Damir Seferberkov">
+        <tagDatabase tag="create table ma_medicals_db"/>
+    </changeSet>
+    <changeSet context="default" author="Damir Seferberkov" id="MED-7-init-create-table-ma_medicals_db">
+        <comment>Создание таблицы ma_medicals_db</comment>
+        <sql>
+            <![CDATA[
+                CREATE TABLE ma_medicals_db
+                (
+                    ID                 UUID          NOT NULL DEFAULT public.uuid_generate_v4() PRIMARY KEY,
+                    country_en         VARCHAR(64)   NOT NULL,
+                    country_ru         VARCHAR(64),
+                    type               VARCHAR(512)  NOT NULL,
+                    name               VARCHAR(512)  NOT NULL,
+                    active_ingredient  VARCHAR(512)  NOT NULL,
+                    description        VARCHAR(1024) NOT NULL,
+                    indications        VARCHAR(2048) NOT NULL,
+                    contraindications  VARCHAR(2048) NOT NULL,
+                    dosing             VARCHAR(5096) NOT NULL,
+                    kidney_friendly    BOOLEAN       NOT NULL DEFAULT TRUE,
+                    pregnant_friendly  BOOLEAN       NOT NULL DEFAULT TRUE,
+                    breastfed_friendly BOOLEAN       NOT NULL DEFAULT TRUE,
+                    liver_friendly     BOOLEAN       NOT NULL DEFAULT TRUE,
+                    child_friendly     BOOLEAN       NOT NULL DEFAULT TRUE,
+                    stomach_friendly   BOOLEAN       NOT NULL DEFAULT TRUE
+                );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE IF EXISTS ma_medicals_db;</rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferberkov" id="MED-7-init-add-indexes-to-ma_medicals_db">
+        <comment>Создание индексов в ma_medicals_db</comment>
+        <sql>
+            <![CDATA[
+                CREATE INDEX idx_ma_medicals_db_type ON ma_medicals_db (type);
+                CREATE INDEX idx_ma_medicals_db_country_en ON ma_medicals_db (country_en);
+                CREATE INDEX idx_ma_medicals_db_country_ru ON ma_medicals_db (country_ru);
+            ]]>
+        </sql>
+        <rollback>DROP INDEX IF EXISTS idx_ma_medicals_db_type; DROP INDEX IF EXISTS idx_ma_medicals_db_country;
+        </rollback>
+    </changeSet>
+</databaseChangeLog>
