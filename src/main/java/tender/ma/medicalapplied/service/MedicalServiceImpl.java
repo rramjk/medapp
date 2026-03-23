@@ -7,6 +7,7 @@ import tender.ma.medicalapplied.model.MedicalFilter;
 import tender.ma.medicalapplied.repository.MedicalRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -16,12 +17,13 @@ public class MedicalServiceImpl implements MedicalService {
 
     @Override
     public List<Medical> getAll() {
-        return null;
+        return repository.findAll();
     }
 
     @Override
     public Medical getById(UUID id) {
-        return null;
+        Optional<Medical> medical = repository.findById(id);
+        return medical.orElseGet(() -> Medical.builder().build());
     }
 
     @Override
@@ -31,17 +33,25 @@ public class MedicalServiceImpl implements MedicalService {
 
     @Override
     public List<String> getAllCountries() {
-        return null;
+        return repository.findAll().stream()
+                .map(Medical::getCountryRu)
+                .distinct().toList();
     }
 
     @Override
     public List<String> getAllTypes() {
-        return null;
+        return repository.findAll().stream()
+                .map(Medical::getType)
+                .distinct().toList();
     }
 
     @Override
     public List<String> getAllNames() {
-        return null;
+        return repository.findAll()
+                .stream()
+                .map(Medical::getName)
+                .distinct()
+                .toList();
     }
 
 }
