@@ -28,7 +28,7 @@ public class MedicalServiceImpl implements MedicalService {
 
     @Override
     public List<Medical> getAllByFilter(MedicalFilter filter) {
-        return null;
+        return repository.findAllByCountryRuAndType(filter.getCountryRu(), filter.getCategory());
     }
 
     @Override

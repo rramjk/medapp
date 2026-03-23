@@ -61,10 +61,11 @@ public class MedicalController {
 
     @PostMapping("/medicals/sign")
     public String signUpToDoctor(@ModelAttribute("emailMessageData") @Valid EmailMessageData messageData,
-                                 BindingResult bindingResul) {
+                                 BindingResult bindingResul){
         mailService.sendSimpleMessage(messageData);
         return "redirect:/v1/medicals";
     }
+
 
     @ModelAttribute("content")
     public void addContent(Model model) {
