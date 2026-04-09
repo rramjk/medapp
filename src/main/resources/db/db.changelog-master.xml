@@ -4,4 +4,5 @@
     </preConditions>
     <include context="default" file="0.0.1/changelog.xml" relativeToChangelogFile="true"/>
     <include context="default" file="0.1.0/changelog.xml" relativeToChangelogFile="true"/>
+    <include context="default" file="0.1.1/changelog.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

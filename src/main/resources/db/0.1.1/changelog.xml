@@ -1,0 +1,101 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.7.xsd">
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <changeSet context="default" author="Damir Seferbekov" id="create-table-ma-user-health-profiles">
+        <comment>Создание таблицы ma_user_health_profiles</comment>
+        <sql>
+            <![CDATA[
+            CREATE TABLE ma_user_health_profiles
+            (
+                id                 UUID      NOT NULL PRIMARY KEY,
+                user_id            UUID UNIQUE REFERENCES ma_users (id),
+                weight             FLOAT     NOT NULL,
+                chronic_conditions JSONB DEFAULT '[]'::jsonb NOT NULL,
+                health_features    JSONB DEFAULT '[]'::jsonb NOT NULL,
+                allergies          JSONB DEFAULT '[]'::jsonb NOT NULL,
+                created_by         TEXT      NOT NULL,
+                created_date       TIMESTAMP NOT NULL,
+                modified_by        TEXT      NOT NULL,
+                modified_date      TIMESTAMP NOT NULL
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE IF EXISTS ma_user_health_profiles;
+        </rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferbekov" id="create-table-ma-medical-views-history">
+        <comment>Создание таблицы ma_medical_views_history</comment>
+        <sql>
+            <![CDATA[
+            CREATE TABLE ma_medical_views_history
+            (
+                id         UUID      NOT NULL PRIMARY KEY,
+                user_id    UUID REFERENCES ma_users (id),
+                medical_id UUID REFERENCES ma_medicals (id),
+                viewed_at  TIMESTAMP NOT NULL
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE IF EXISTS ma_medical_views_history;
+        </rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferbekov" id="alter-table-ma-users-with-email-verified">
+        <comment>Обновление таблицы ma_users</comment>
+        <sql>
+            <![CDATA[
+            ALTER TABLE ma_users ADD COLUMN email_verified BOOLEAN DEFAULT FALSE;
+            ]]>
+        </sql>
+        <rollback>
+            ALTER TABLE ma_users DROP COLUMN IF EXISTS email_verified;
+        </rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferbekov" id="alter-table-ma-users-with-privacy-consent">
+        <comment>Обновление таблицы ma_users</comment>
+        <sql>
+            <![CDATA[
+            ALTER TABLE ma_users ADD COLUMN privacy_consent BOOLEAN DEFAULT FALSE;
+            ]]>
+        </sql>
+        <rollback>
+            ALTER TABLE ma_users DROP COLUMN IF EXISTS privacy_consent;
+        </rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferbekov" id="create-table-ma-email-verifications">
+        <comment>Создание таблицы ma_email_verifications</comment>
+        <sql>
+            <![CDATA[
+            CREATE TABLE ma_email_verifications
+            (
+                id      UUID      NOT NULL PRIMARY KEY,
+                user_id UUID REFERENCES ma_users (id),
+                expired TIMESTAMP NOT NULL,
+                status  TEXT      NOT NULL
+            );
+            ]]>
+        </sql>
+        <rollback>DROP TABLE IF EXISTS ma_email_verifications;
+        </rollback>
+    </changeSet>
+
+    <changeSet context="default" author="Damir Seferbekov" id="alter-table-ma-email-verification-with-verification-token">
+        <comment>Обновление таблицы ma_email_verification</comment>
+        <sql>
+            <![CDATA[
+            ALTER TABLE ma_email_verifications ADD COLUMN verification_token UUID NOT NULL;
+            ]]>
+        </sql>
+        <rollback>
+            ALTER TABLE ma_email_verifications DROP COLUMN IF EXISTS verification_token;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
