@@ -20,11 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UserAuthorizationException {
+    public UserDetails loadUserByUsername(String username) {
         String email = username;
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserAuthorizationException(USER_FOR_AUTHORIZE_NOT_FOUND.getErrorMessage(email)));
-
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
