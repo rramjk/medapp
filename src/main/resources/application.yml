@@ -1,0 +1,15 @@
+yml-vars:
+  database:
+    host: ${POSTGRESQL_HOST:127.0.0.1}
+    port: ${POSTGRESQL_PORT:5432}
+    name: ${POSTGRESQL_NAME:ma_medicals_db}
+    username: ${POSTGRESQL_USER:postgres}
+    password: ${POSTGRESQL_PASSWORD:123456}
+    url: jdbc:postgresql://${yml-vars.database.host}:${yml-vars.database.port}/${yml-vars.database.name}
+  app:
+    port: ${APP_PORT:8090}
+    baseUrl: ${APP_BASE_PREFIX:http://localhost}
+
+server:
+  port: ${yml-vars.app.port}
+  baseUrl: ${yml-vars.app.baseUrl}:${yml-vars.app.port}
