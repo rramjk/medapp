@@ -1,7 +1,10 @@
 package tender.ma.medicalapplied.service;
 
-import tender.ma.medicalapplied.model.EmailMessageData;
+import tender.ma.medicalapplied.model.user.User;
+
+import java.util.UUID;
 
 public interface MailService {
-    void sendSimpleMessage(EmailMessageData emailMessageData);
+
+    void sendSimpleMessageToEmailVerified(User user, UUID token);
 }

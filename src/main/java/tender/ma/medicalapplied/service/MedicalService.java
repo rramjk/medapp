@@ -1,22 +1,19 @@
 package tender.ma.medicalapplied.service;
 
-import tender.ma.medicalapplied.model.Medical;
-import tender.ma.medicalapplied.model.MedicalFilter;
+import tender.ma.medicalapplied.dto.MedicalDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface MedicalService {
 
-    List<Medical> getAll();
+    List<MedicalDto> getMedicals(String countryEn, String category, String name);
 
-    Medical getById(UUID id);
+    MedicalDto getMedicalById(UUID id);
 
-    List<Medical> getAllByFilter(MedicalFilter medical);
+    List<String> getMedicalCategories();
 
-    List<String> getAllCountries();
+    List<String> getMedicalCountries(boolean translateCountryName);
 
-    List<String> getAllTypes();
-
-    List<String> getAllNames();
+    List<String> getMedicalNames();
 }
