@@ -1,3 +1,76 @@
+yml-vars:
+  database:
+    host: ${POSTGRESQL_HOST:127.0.0.1}
+    port: ${POSTGRESQL_PORT:5432}
+    name: ${POSTGRESQL_NAME:ma_medicals_db}
+    username: ${POSTGRESQL_USER:postgres}
+    password: ${POSTGRESQL_PASSWORD:123456}
+    url: jdbc:postgresql://${yml-vars.database.host}:${yml-vars.database.port}/${yml-vars.database.name}
+  app:
+    port: ${APP_PORT:8090}
+    baseUrl: ${APP_BASE_PREFIX:http://localhost}
+
+server:
+  port: ${yml-vars.app.port}
+  baseUrl: ${yml-vars.app.baseUrl}:${yml-vars.app.port}
+
 spring:
   application:
     name: medical-applied
+  datasource:
+    url: ${yml-vars.database.url}
+    driver-class-name: org.postgresql.Driver
+    username: ${yml-vars.database.username}
+    password: ${yml-vars.database.password}
+  mail:
+    port: 587
+    host: smtp.gmail.com
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            trust: smtp.gmail.com
+    default-encoding: UTF-8
+  jackson:
+    mapper:
+      sort-properties-alphabetically: false
+  jpa:
+    properties:
+      hibernate:
+        show-sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        hbm2ddl:
+          auto: none
+  liquibase:
+    change-log: classpath:/db/db.changelog-master.xml
+    enabled: true
+
+service:
+  delay:
+    processEmailsVerifiedDelay: ${CLEAR_EMAILS_VERIFIED_DELAY:1800000}
+    clearViewsHistoryDelay: ${CLEAR_VIEWS_HISTORY_DELAY:3600000}
+  expired:
+    viewsHistoryExpiredAt: ${VIEWS_HISTORY_EXPIRED_AT:30}
+    emailsVerifiedExpiredAt: ${EMAILS_VERIFIED_EXPIRED_AT:1}
+
+  token:
+    signing:
+      key:
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+
+logging:
+  level:
+    tender: TRACE
