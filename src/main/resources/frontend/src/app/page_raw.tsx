@@ -84,22 +84,6 @@ export default function HomePage() {
           }
         />
 
-        <section className="hero hero-home">
-          <p className="eyebrow">Справочный сервис</p>
-          <h2>Удобная точка входа в каталог лекарственных препаратов и пользовательские сценарии Medical Applied</h2>
-          <p>
-            Главная страница теперь сфокусирована не на техническом dashboard, а на понятной справочной подаче:
-            что это за сервис, как им пользоваться, какие действия доступны после авторизации и на что нужно
-            обратить внимание перед выбором препарата.
-          </p>
-          <div className="badge-list">
-            <span className="badge">Поиск препаратов</span>
-            <span className="badge">Справочная информация</span>
-            <span className="badge">Профиль пользователя</span>
-            <span className="badge">JWT авторизация</span>
-          </div>
-        </section>
-
         <section className="card info-card info-card-accent">
           <p className="eyebrow">Важная информация</p>
           <h3>Medical Applied — информационный сервис, а не замена врачу</h3>
@@ -123,80 +107,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="two-panel">
-          <article className="card info-card">
-            <p className="eyebrow">Как использовать платформу</p>
-            <h3>Основной пользовательский сценарий</h3>
-            <div className="info-text">
-              <p>
-                1. Зарегистрируй пользователя и выполни вход, чтобы получить доступ к защищённым REST-операциям.
-              </p>
-              <p>
-                2. Перейди в каталог препаратов, выбери страну, категорию или название и открой детальную карточку.
-              </p>
-              <p>
-                3. Используй профиль пользователя для хранения данных аккаунта, истории и связанной информации о здоровье.
-              </p>
-              <p>
-                4. При необходимости выполни верификацию email и управляй параметрами безопасности через экран смены пароля.
-              </p>
-            </div>
-          </article>
-
-          <article className="card info-card">
-            <p className="eyebrow">Что доступно в системе</p>
-            <h3>Ключевые возможности frontend-клиента</h3>
-            <div className="info-text">
-              <p>
-                Каталог препаратов с фильтрацией и просмотром карточек, CRUD для пользователей, работа с профилем
-                здоровья, верификация email, восстановление и обновление данных учётной записи.
-              </p>
-              <p>
-                Интерфейс спроектирован так, чтобы сначала дать пользователю контекст и предупреждения, а уже затем
-                предлагать конкретные действия и переходы в рабочие разделы.
-              </p>
-              <p>
-                Для backend-интеграции используется единый API-слой, а авторизация строится на JWT-токене, который
-                автоматически подставляется в защищённые запросы.
-              </p>
-            </div>
-          </article>
-        </section>
-
         {!isReady ? <LoadingBlock label="Подготавливаем пользовательскую сессию…" /> : null}
-
-        {isAuthenticated ? (
-          <>
-            {loading ? <LoadingBlock label="Загружаем сводную информацию по системе…" /> : null}
-            {error ? <div className="alert alert-error">{error}</div> : null}
-            {stats ? (
-              <section className="stats-grid">
-                <StatCard label="Пользователи" value={stats.users} helper="GET /api/users" />
-                <StatCard label="Наименования" value={stats.names} helper="GET /api/medicals/names" />
-                <StatCard label="Категории" value={stats.categories} helper="GET /api/medicals/categories" />
-                <StatCard label="Страны" value={stats.countries} helper="GET /api/medicals/countries" />
-              </section>
-            ) : null}
-          </>
-        ) : (
-          <section className="card-grid">
-            <FeatureCard
-              badge="public"
-              title="Создать аккаунт"
-              description="Начни с регистрации пользователя через публичный endpoint и подготовь аккаунт для дальнейшей работы с каталогом и персональными данными."
-            />
-            <FeatureCard
-              badge="public"
-              title="Войти в систему"
-              description="После авторизации JWT-токен сохраняется локально и используется для всех защищённых запросов frontend-клиента."
-            />
-            <FeatureCard
-              badge="guide"
-              title="Изучить возможности"
-              description="Даже без входа на главной странице можно понять назначение платформы, ограничения сервиса и основные сценарии использования."
-            />
-          </section>
-        )}
 
         <section className="card-grid">
           <FeatureCard
@@ -230,15 +141,25 @@ export default function HomePage() {
             description="Архитектура страницы уже готова для расширения: можно добавить рекомендации, врачебные сценарии и отдельные аналитические блоки."
           />
         </section>
-
-        <section className="card">
-          <p className="eyebrow">Конфигурация</p>
-          <h3>Текущий backend endpoint</h3>
-          <p className="muted">
-            Frontend ожидает, что Spring Boot backend доступен по адресу, указанному в переменной среды
-            <code> NEXT_PUBLIC_API_BASE_URL</code>.
-          </p>
-          <div className="token-box">{getApiBaseUrl()}</div>
+         <section className="two-panel">
+          <article className="card info-card">
+            <p className="eyebrow">Как использовать платформу</p>
+            <h3>Основной пользовательский сценарий</h3>
+            <div className="info-text">
+              <p>
+                1. Зарегистрируй пользователя и выполни вход, чтобы получить доступ к защищённым REST-операциям.
+              </p>
+              <p>
+                2. Перейди в каталог препаратов, выбери страну, категорию или название и открой детальную карточку.
+              </p>
+              <p>
+                3. Используй профиль пользователя для хранения данных аккаунта, истории и связанной информации о здоровье.
+              </p>
+              <p>
+                4. При необходимости выполни верификацию email и управляй параметрами безопасности через экран смены пароля.
+              </p>
+            </div>
+          </article>
         </section>
       </div>
     </AppShell>
